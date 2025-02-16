@@ -71,7 +71,6 @@ fn sort_deviance_load(red: u8, green: u8, blue: u8, img: DynamicImage) -> String
         } else {
             deviance +=  pixel[2] as u32  - blue as u32;
         }
-
         pixels.push((deviance, x, y, pixel));
     }
     // merge sorts the vector based on the total value of their RGB channels 
@@ -99,13 +98,13 @@ fn sort_deviance_load(red: u8, green: u8, blue: u8, img: DynamicImage) -> String
 }
 
 #[tauri::command]
-fn process(input: &str) -> String {
+fn process(input: &str, red: u8, green: u8, blue: u8) -> String {
     // decode the image from front-end
     let decoded_image_bytes: Vec<u8> = general_purpose::STANDARD.decode(input).unwrap();
     // writing to temporary location
     let img = image::load_from_memory(&decoded_image_bytes);
     // file writes to location, but app crashes right after
-    let output = sort_deviance_load(255, 255, 255, img.expect("Whoah there buddy image mightve loaded inproperly"));
+    let output = sort_deviance_load(red, green, blue, img.expect("Whoah there buddy image mightve loaded inproperly"));
     output
 }
 

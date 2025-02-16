@@ -1,7 +1,7 @@
 {
-  "name": "learningsvelte",
-  "version": "0.1.0",
-  "description": "",
+  "name": "pixie",
+  "version": "1.0.0",
+  "description": "Quickly Process Images Using Advanced Pixel Ranking Algorithms",
   "type": "module",
   "scripts": {
     "dev": "vite dev",

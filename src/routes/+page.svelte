@@ -6,6 +6,11 @@
   let image = $state("");
   let input_image = "";
   let status = $state("Sort!");
+  let settingsMode = $state(false);
+  let red = $state("255");
+  let green = $state("255");
+  let blue = $state("255");
+
   const handleFileChange = (/** @type {{ target: { files: null[]; }; }} */ e) =>{
     file = e.target.files[0];
     if(file) {
@@ -26,10 +31,19 @@
     imageUrl = "";
   }
 
+  const viewCode = () => {
+    window.open("https://github.com/Royal51651/pixie", '_blank')?.focus();
+  }
+
   async function submit(event) {
     status = "Sorting..."
     event.preventDefault();
-    image = await invoke("process", { input: input_image });
+    image = await invoke("process", { 
+      input: input_image, 
+      red: Number(red), 
+      green: Number(green), 
+      blue: Number(blue)
+    });
     console.log(image);
 
     // converts the image to a blob
@@ -48,35 +62,70 @@
     }, 2000);
   }
 
+  const toggleSettings = () => {
+    settingsMode = !settingsMode;
+  }
+
 </script>
 
 <main class="container">
-
-  {#if !imageUrl}
-  <div class="row">   
-    <h1>Pixie 1</h1>
-  </div>
-  <div class="row">   
-    <h2>Select A File To Get Started</h2>
-  </div>
-  {/if}
-  {#if imageUrl}
-  <div class="buttonArea">
-    <button class="buttons" onclick={submit}>{status}</button>
-  </div>
-  {/if}
-  <div class="submitArea">
-    <input type="file" onchange={handleFileChange} accept="image/*" />
-  </div>
-  <div class="imageDisplay">
-    {#if imageUrl}
-      <img src={imageUrl} alt="Sorter" />
+  {#if !settingsMode}
+    {#if !imageUrl}
+    <div class="row">   
+      <h1>Pixie 1</h1>
+    </div>
+    <div class="row">   
+      <h2>Select A File To Get Started</h2>
+    </div>
     {/if}
-  </div>
+    {#if imageUrl}
+    <div class="buttonArea">
+      <button class="buttons" onclick={submit}>{status}</button>
+      <button class="settings" onclick={toggleSettings}>
+        <img src="src/routes/settings.png" alt="Button">
+      </button>
+    </div>
+    {/if}
+    <div class="submitArea">
+      <input type="file" onchange={handleFileChange} accept="image/*" />
+    </div>
+    <div class="imageDisplay">
+      {#if imageUrl}
+        <img src={imageUrl} alt="Sorter" />
+      {/if}
+    </div>
+
+  {:else}
+    <div class="settingsRow">
+      <button class="buttons" onclick={viewCode}>View Source Code On Github</button>
+      <button class="settings" onclick={toggleSettings}>
+        <img src="src/routes/settings.png" alt="Button">
+      </button>
+    </div>
+    <div class="settingsRow">
+      <form style="width: 50%;">
+        <input class="colorSelect" type="range" bind:value={red} min="0" max="255" style="accent-color: red;"/>
+        <input class="colorSelect" type="text" bind:value={red}/>
+        <input class="colorSelect" type="range" bind:value={green} min="0" max="255" style="accent-color: green;"/>
+        <input class="colorSelect" type="text" bind:value={green}/>
+        <input class="colorSelect" type="range" bind:value={blue} min="0" max="255" style="accent-color: blue;"/>
+        <input class="colorSelect" type="text" bind:value={blue}/>
+        <h1 style="color: rgb({red}, {green}, {blue});">Target Color</h1>
+      </form>
+    </div>
+  {/if}
 
 </main>
 
 <style>
+
+.colorSelect {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  color: #ffffff;
+}
+
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 20px;
@@ -84,13 +133,29 @@
   font-weight: 400;
 
   color: #0f0f0f;
-  background-color: #f6f6f6;
+  background: linear-gradient(135deg, rgb(255, 128, 0), rgb(17, 135, 148));
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  
+}
+
+.settingsRow {
+  display: flex;
+  height: 25%;
+  width: 100%;
+}
+
+.settings {
+  width: 5%;
+  margin-left: 10px;
+}
+
+.settings img {
+  display: block;
 }
 
 .imageDisplay {

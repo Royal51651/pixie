@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "learningsvelte",
-  "version": "0.1.0",
-  "identifier": "com.learningsvelte.app",
+  "productName": "pixie",
+  "version": "1.0.0",
+  "identifier": "com.pixie.app",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "learningsvelte",
+        "title": "pixie",
         "width": 800,
         "height": 600
       }
