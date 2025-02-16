@@ -32,12 +32,11 @@ fn merge(left: &Vec<(u32, u32, u32, image::Rgba<u8>)>, right: &Vec<(u32, u32, u3
             j += 1;
         }
     }
-
+    // typical merge sort stuff
     while i < left.len() {
         output.push(left[i]);
         i += 1;
     }
-
     while j < right.len() {
         output.push(right[j]);
         j += 1;
@@ -73,9 +72,9 @@ fn sort_deviance_load(red: u8, green: u8, blue: u8, img: DynamicImage) -> String
         }
         pixels.push((deviance, x, y, pixel));
     }
-    // merge sorts the vector based on the total value of their RGB channels 
+    // merge sorts the vector based on their deviance from the selected color
     let sorted = merge_sort(&pixels);
-    // copies the sorted pixel data back to the buffer in a gradient-fashion
+    // copies the sorted pixel data back to the buffer starting from the top left and working down
     let mut i = 0;
     for d in 0..(imgy + imgx - 1) {
         for y in (0..=d).rev() {
@@ -87,8 +86,7 @@ fn sort_deviance_load(red: u8, green: u8, blue: u8, img: DynamicImage) -> String
         }
     }
         
-    // finally, saves the image
-    //let location = format!("sorted.png", output_path);
+    // encodes to b64 and returns
     let mut output_bytes = Vec::new();
     let encoder = png::PngEncoder::new(&mut output_bytes);
     encoder.write_image(&buffer, imgx, imgy, Rgba8).unwrap();
@@ -101,9 +99,9 @@ fn sort_deviance_load(red: u8, green: u8, blue: u8, img: DynamicImage) -> String
 fn process(input: &str, red: u8, green: u8, blue: u8) -> String {
     // decode the image from front-end
     let decoded_image_bytes: Vec<u8> = general_purpose::STANDARD.decode(input).unwrap();
-    // writing to temporary location
+    // loading the image from memory
     let img = image::load_from_memory(&decoded_image_bytes);
-    // file writes to location, but app crashes right after
+    // sorts the pixels and returns a b64 string
     let output = sort_deviance_load(red, green, blue, img.expect("Whoah there buddy image mightve loaded inproperly"));
     output
 }

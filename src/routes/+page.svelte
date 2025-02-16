@@ -35,6 +35,9 @@
     window.open("https://github.com/Royal51651/pixie", '_blank')?.focus();
   }
 
+  /**
+     * @param {{ preventDefault: () => void; }} event
+     */
   async function submit(event) {
     status = "Sorting..."
     event.preventDefault();
@@ -44,8 +47,7 @@
       green: Number(green), 
       blue: Number(blue)
     });
-    console.log(image);
-
+    
     // converts the image to a blob
     const bytes = atob(image);
     const byteArray1 = [];
@@ -61,6 +63,8 @@
       status = "Sort!";
     }, 2000);
   }
+
+
 
   const toggleSettings = () => {
     settingsMode = !settingsMode;
@@ -122,8 +126,15 @@
 .colorSelect {
   margin-top: 10px;
   width: 100%;
+  height: 5vh;
   display: flex;
   color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  justify-content: center;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
 }
 
 :root {
@@ -133,8 +144,6 @@
   font-weight: 400;
 
   color: #0f0f0f;
-  background: linear-gradient(135deg, rgb(255, 128, 0), rgb(17, 135, 148));
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -147,6 +156,7 @@
   display: flex;
   height: 25%;
   width: 100%;
+  max-height: 100%;
 }
 
 .settings {
@@ -159,12 +169,29 @@
 }
 
 .imageDisplay {
-  padding-top: 10px;
-  height: 100%;
-  width: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  padding-top: 1vh;
+  margin: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 85vh;
+  width: 100vw;
+  overflow: hidden;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.imageDisplay img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 img {
+  padding: 0px;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -188,24 +215,34 @@ h1 {
 }
 
 .buttonArea{
+  padding-left: 0px;
+  padding-right: 0px;
   display: flex;
   justify-content: center;
+  width: 100%;
+  height: 5vh;
 }
 
 .buttons {
+  height: 100%;
   width: 100%;
+  justify-content: center;
 }
 
 .submitArea {
   display: flex;
-  padding-top: 10px;
+  padding-top: 1vh;
 }
-
+.submitArea input {
+  border-radius: 8px;
+  font-size: 1em;
+}
 input {
-  width: 100%;
+  width: 100vw;
+  height: 100%;
 }
 
-input,
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -244,7 +281,7 @@ button {
   :root {
     color: #f6f6f6;
     --background-color: #997f3e;
-    background: linear-gradient(135deg, rgb(164, 10, 225), rgb(17, 135, 148));
+    background: linear-gradient(135deg, rgb(200, 9, 217), rgb(17, 135, 148));
     background-size: 100%;
     background-attachment: fixed;
   }
