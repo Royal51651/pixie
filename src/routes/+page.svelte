@@ -56,22 +56,23 @@
             status = "Sort!";
         }, 2000);
     }
-    /*
-    const changeBackgroundColor = () => {
-        const color1 = "rgb(" + String(255 - parseInt(red)) + ", " + String(255 - parseInt(green)) + ", " + String(255 - parseInt(blue)) + ")";
-        const color2 = "rgb(" + red + ", " + green + ", " + "blue" + ")";
-        document.documentElement.style.background = "linear-gradient(135deg, " + color1 + ", " + color2 + ")";
+
+    // @ts-ignore
+    const changeBackgroundColor = (inputRed, inputGreen, inputBlue) => {
+        
+        const color1 = "rgb(" + String(255 - parseInt(inputRed)) + ", " + String(255 - parseInt(inputGreen)) + ", " + String(255 - parseInt(inputBlue)) + ")";
+        const color2 = "rgb(" + inputRed + ", " + inputGreen + ", " + inputBlue + ")";
+        document.documentElement.style.setProperty("--negative", color1);
+        document.documentElement.style.setProperty("--positive", color2);
     }
-    */
 
     const toggleSettings = () => {
         settingsMode = !settingsMode;
-        //changeBackgroundColor();
     };
 
-    
-
-
+    $effect(() => {
+        changeBackgroundColor(red, green, blue);
+    });
 
 </script>
 
@@ -94,14 +95,13 @@
         <div class="submitArea">
             <input type="file" onchange={handleFileChange} accept="image/*" />
         </div>
-        <div class="imageDisplay">
-            {#if imageUrl}
-                <img src={imageUrl} alt="Sorter" />
-            {/if}
-        </div>
+        {#if imageUrl}
+            <div class="imageDisplay">
+                    <img src={imageUrl} alt="Sorter" />
+            </div>
+        {/if}
     {:else}
         <div class="settingsRow">
-
             <button class="buttons" onclick={toggleSettings}>Back</button>
         </div>
         <div class="settingsRow">
@@ -148,9 +148,6 @@
                     bind:value={blue} 
                     style="color: blue;"
                 />
-                <h1 style="color: rgb({red}, {green}, {blue});">
-                    Target Color
-                </h1>
             </form>
         </div>
     {/if}
@@ -311,7 +308,9 @@
         :root {
             color: #f6f6f6;
             --background-color: #997f3e;
-            background: linear-gradient(135deg,rgb(200, 9, 217),rgb(17, 135, 148));
+            --negative: rgb(200, 9, 217);
+            --positive: rgb(17, 135, 148);
+            background: linear-gradient(135deg, var(--negative),var(--positive));
             background-size: 100%;
             background-attachment: fixed;
         }
